@@ -22,22 +22,22 @@ library(likert)
 library(FactoMineR)
 library(factoextra)
 
-# Análisis confirmatorio
+# AnÃ¡lisis confirmatorio
 library(lavaan)
 
 ###############################################################################
-# Recodificación de variables
+# RecodificaciÃ³n de variables
 ###############################################################################
 
 # la variable sexo: 1 = Hombre, 2 = Mujer
 df$sexo <- factor( df$sexo, labels = c( "Hombre", "Mujer" ) )
-# actividadS: 1 = Nada, 2 = Poco, 3 = Mucho, 4 = Muchísimo
-df$actividadS <- factor( df$actividadS, labels = c( "Nada", "Poco", "Mucho", "Muchísimo" ) )
+# actividadS: 1 = Nada, 2 = Poco, 3 = Mucho, 4 = MuchÃ­simo
+df$actividadS <- factor( df$actividadS, labels = c( "Nada", "Poco", "Mucho", "MuchÃ­simo" ) )
 # la variable origen: A = Albacete, M = Murcia, H = Helsinki
 df$origen <- factor( df$origen, labels = c( "Albacete", "Helsinki", "Murcia" ) )
 # Cambiamos el orden para que Murcia sea la segunda
 df$origen <- factor( df$origen, levels = levels( df$origen )[ c( 1, 3, 2 ) ] )
-# la variable nivel de inglés: nos dan los niveles del 1 al 10
+# la variable nivel de inglÃ©s: nos dan los niveles del 1 al 10
 nivelesIngles  <- c( "Nulo", "CasiNulo", "A1", "A2", "B1", "B2", "C1", "C2"
                      , "IsabelII", "Shakespeare" )
 df$nivelIngles <- factor( df$nivelIngles, labels = nivelesIngles )
@@ -45,7 +45,7 @@ df$nivelIngles <- factor( df$nivelIngles, labels = nivelesIngles )
 # se convierten en factores
 nivelesQ     <- c( "Muy en desacuerdo", "En desacuerdo", "Neutro", "De acuerdo", "Muy de acuerdo" )
 df[ , 7:29 ] <- lapply( df[ , 7:29 ], factor, labels = nivelesQ )
-# recomendable: evitar índices númericos
+# recomendable: evitar Ã­ndices nÃºmericos
 questions         <- c( paste0( "Q0", 1:9 ), paste0( "Q", 10:23 ) )
 df[ , questions ] <- lapply( df[ , questions ], factor, labels = nivelesQ )
 
@@ -54,7 +54,7 @@ df[ , questions ] <- lapply( df[ , questions ], factor, labels = nivelesQ )
 # Cargar los datos
 ###############################################################################
 
-setwd("G:/Mi unidad/Análisis factorial/Codigo")
+setwd("G:/Mi unidad/AnÃ¡lisis factorial/Codigo")
 load( "saeraq.RData" )
 
 ###############################################################################
@@ -81,7 +81,7 @@ items1 <- likert( items = dfLikert[ , bloque1 ] )
 items2 <- likert( items = dfLikert[ , bloque2 ] )
 items3 <- likert( items = dfLikert[ , bloque3 ] )
 
-# Gráfico de barras
+# GrÃ¡fico de barras
 plot( items1, centered = TRUE, group.order = colnames( items1$items ),
       legend.position = "right" ) +
   theme( axis.text.x = element_text( size = 10 ),
@@ -157,10 +157,10 @@ corrplot.mixed( corr, tl.pos = "lt", diag = 'n', upper = "ellipse",
 
 
 ###############################################################################
-# Análisis de Componentes Principales
+# AnÃ¡lisis de Componentes Principales
 ###############################################################################
 
-# ¿Cuantos factores?
+# Â¿Cuantos factores?
 indicesPreg <- grep( "^Q", colnames( df ) )
 df[ , indicesPreg ] <- as.data.frame( lapply( df[ , indicesPreg ], as.numeric ) )
 
@@ -195,7 +195,7 @@ pc1
 plot(pc1$values, type="b") 
 
 ###############################################################################
-# Comprobaciones antes de empezar el análisi
+# Comprobaciones antes de empezar el anÃ¡lisi
 ###############################################################################
 
 # Determinante de la matriz
@@ -203,11 +203,11 @@ corrMatrix <- cor(dfCor)
 det(corrMatrix)
 
 # Multicolinealidad
-cat("Nº de variables que podrían causar multicolinealidad: ",
+cat("NÂº de variables que podrÃ­an causar multicolinealidad: ",
     sum( sapply(as.data.frame(corrMatrix), function(x) any(x >= 0.9 & x != 1)) ) )
 
-# Poca correlación
-cat("Nº de variables que no correlacionan bien: ",
+# Poca correlaciÃ³n
+cat("NÂº de variables que no correlacionan bien: ",
     sum( sapply(as.data.frame(corrMatrix), function(x) all(x < 0.3)) ) )
 
 # Test de Bartlett
@@ -218,15 +218,15 @@ cortest.bartlett(corrMatrix, nrow(dfCor))
 # Ver url
 
 ###############################################################################
-# Análisis de Componentes Principales
+# AnÃ¡lisis de Componentes Principales
 ###############################################################################
 
-# 4 factores + Rotación
+# 4 factores + RotaciÃ³n
 pc3 <- principal(corrMatrix, nfactors=5, rotate="varimax")
 print.psych(pc3, cut = 0.3, sort = TRUE)
 
 ###############################################################################
-# Alpha de Cronbach's - Análisis de Fiabilidad
+# Alpha de Cronbach's - AnÃ¡lisis de Fiabilidad
 ###############################################################################
 
 # Agrupamos las variables en sus respectivos grupos
@@ -294,3 +294,6 @@ semPaths(models$m1, curvePivot = TRUE)
 
 # KMO
 # https://tolstoy.newcastle.edu.au/R/e2/help/07/08/22816.html
+                
+# Teoria muy buena
+http://www.fuenterrebollo.com/Economicas/ECONOMETRIA/MULTIVARIANTE/FACTORIAL/analisis-factorial.pdf
